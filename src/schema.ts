@@ -10,5 +10,5 @@ export const tasksTable = pgTable('tasks_table', {
     .$onUpdate(() => new Date()),
 });
 
-export type InsertTask = typeof tasksTable.$inferInsert;
-export type SelectTask = typeof tasksTable.$inferSelect;
+export type InsertTasks = typeof tasksTable.$inferInsert;
+export type SelectTasks = typeof tasksTable.$inferSelect;
