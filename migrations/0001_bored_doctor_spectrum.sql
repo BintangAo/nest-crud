@@ -1,0 +1,1 @@
+ALTER TABLE "task_table" RENAME TO "tasks_table";
