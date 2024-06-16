@@ -15,6 +15,20 @@
       "when": 1717938456203,
       "tag": "0001_bored_doctor_spectrum",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1718086442748,
+      "tag": "0002_square_hulk",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1718544098389,
+      "tag": "0003_young_the_captain",
+      "breakpoints": true
     }
   ]
 }
