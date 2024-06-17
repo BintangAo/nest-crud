@@ -10,16 +10,18 @@ import { SelectTasks, tasksTable } from 'src/schema';
 @Injectable()
 export class SelectTaskService {
   async getOneTask(id: SelectTasks['id']): Promise<SelectTasks> {
-    let task: SelectTasks[];
     try {
-      task = await db.select().from(tasksTable).where(eq(tasksTable.id, id));
+      const task = await db
+        .select()
+        .from(tasksTable)
+        .where(eq(tasksTable.id, id));
+      if (!task[0]) {
+        throw new NotFoundException();
+      } else {
+        return task[0];
+      }
     } catch {
       throw new InternalServerErrorException('Failed to fetch to the database');
-    }
-    if (!task[0]) {
-      throw new NotFoundException();
-    } else {
-      return task[0];
     }
   }
   async getAllTasks(): Promise<SelectTasks> {
