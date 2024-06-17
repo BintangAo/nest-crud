@@ -22,11 +22,11 @@ export class SelectTaskService {
       return task[0];
     }
   }
-  async getAllTasks(): Promise<[SelectTasks[], string | null]> {
+  async getAllTasks(): Promise<SelectTasks> {
     let tasks: SelectTasks[];
     try {
       tasks = await db.select().from(tasksTable);
-      return [tasks, null];
+      return tasks[0];
     } catch {
       throw new InternalServerErrorException('Failed to fetch to the database');
     }
