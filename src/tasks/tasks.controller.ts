@@ -35,7 +35,7 @@ export class TasksController {
     @Req() req: Request,
   ) {
     const userToken = req.signedCookies['user-token'] as string;
-    const data = await this.selectTask.getOneTask(params.id, userToken);
+    const data = await this.selectTask.getOneTask(Number(params.id), userToken);
 
     return res.json(data);
   }
@@ -69,7 +69,10 @@ export class TasksController {
     @Req() req: Request,
   ) {
     const userToken = req.signedCookies['user-token'] as string;
-    const task = this.deleteTask.deleteOneTask(params.id, userToken);
+    const task = await this.deleteTask.deleteOneTask(
+      Number(params.id),
+      userToken,
+    );
     return res.json(task);
   }
   @Patch(':id')
@@ -84,7 +87,7 @@ export class TasksController {
     }
     const userToken = req.signedCookies['user-token'] as string;
     const task = await this.updateTask.updateOneTask(
-      params.id,
+      Number(params.id),
       userToken,
       body,
     );
