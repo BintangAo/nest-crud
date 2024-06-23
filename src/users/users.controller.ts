@@ -10,9 +10,8 @@ export class UsersController {
     private readonly login: LoginService,
   ) {}
   @Get()
-  userCookie(@Req() req: Request) {
-    const { userToken } = req.signedCookies as { userToken: string };
-    console.log(userToken);
+  fakeCookies(@Res() res: Response) {
+    res.cookie('user-token', 'a', { signed: true }).json({ ok: 'ok' });
   }
   @Post('register')
   async userRegister(

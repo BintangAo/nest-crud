@@ -6,12 +6,15 @@ import {
   Param,
   Post,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateTasksService } from './create-tasks.service';
 import { SelectTaskService } from './select-tasks.service';
 import { InsertTasks, SelectTasks } from 'src/schema';
 import { Response } from 'express';
+import { AuthGuard } from 'src/auth/auth.guard';
 @Controller('tasks')
+@UseGuards(new AuthGuard())
 export class TasksController {
   constructor(
     private readonly createTask: CreateTasksService,
@@ -31,7 +34,6 @@ export class TasksController {
   }
   @Post()
   async create(@Body() body: InsertTasks, @Res() res: Response) {
-    console.info(body);
     if (!body.title || !body.content) {
       throw new BadRequestException('Invalid body of request');
     }
