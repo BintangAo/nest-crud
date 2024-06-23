@@ -5,6 +5,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   Req,
   Res,
@@ -16,6 +17,7 @@ import { InsertTasks, SelectTasks } from 'src/schema';
 import { Request, Response } from 'express';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { DeleteTaskService } from './delete-task.service';
+import { TaskUpdate, UpdateTaskService } from './update-task.service';
 @Controller('tasks')
 @UseGuards(new AuthGuard())
 export class TasksController {
@@ -23,6 +25,7 @@ export class TasksController {
     private readonly createTask: CreateTasksService,
     private readonly selectTask: SelectTaskService,
     private readonly deleteTask: DeleteTaskService,
+    private readonly updateTask: UpdateTaskService,
   ) {}
 
   @Get(':id')
@@ -67,6 +70,24 @@ export class TasksController {
   ) {
     const userToken = req.signedCookies['user-token'] as string;
     const task = this.deleteTask.deleteOneTask(params.id, userToken);
+    return res.json(task);
+  }
+  @Patch()
+  async update(
+    @Param() params: { id: SelectTasks['id'] },
+    @Res() res: Response,
+    @Req() req: Request,
+    @Body() body: TaskUpdate,
+  ) {
+    if (!body.content && !body.title) {
+      throw new BadRequestException('Invalid body of request');
+    }
+    const userToken = req.signedCookies['user-token'] as string;
+    const task = await this.updateTask.updateOneTask(
+      params.id,
+      userToken,
+      body,
+    );
     return res.json(task);
   }
 }
