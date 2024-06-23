@@ -13,8 +13,8 @@ export class DeleteTaskService {
     taskId: SelectTasks['id'],
     userToken: SelectUsers['token'],
   ): Promise<SelectTasks> {
-    try {
-      const { tasks } = await db.query.usersTable.findFirst({
+    const { tasks } = await db.query.usersTable
+      .findFirst({
         where: eq(usersTable.token, userToken),
         with: {
           tasks: {
@@ -23,25 +23,27 @@ export class DeleteTaskService {
             },
           },
         },
+      })
+      .catch(() => {
+        throw new InternalServerErrorException(
+          'Failed to fetch to the database',
+        );
       });
-      if (
-        tasks.some(({ id }) => {
-          id === taskId;
-        })
-      ) {
-        const task = await db
-          .delete(tasksTable)
-          .where(eq(tasksTable.id, taskId))
-          .returning()
-          .catch(() => {
-            throw new InternalServerErrorException('Failed to fetch database');
-          });
-        return task[0];
-      } else {
-        throw new NotFoundException('Cannot find task from the requested id');
-      }
-    } catch {
-      throw new InternalServerErrorException('Failed to fetch database');
+    if (
+      tasks.some(({ id }) => {
+        return id === taskId;
+      })
+    ) {
+      const task = await db
+        .delete(tasksTable)
+        .where(eq(tasksTable.id, taskId))
+        .returning()
+        .catch(() => {
+          throw new InternalServerErrorException('Failed to fetch database');
+        });
+      return task[0];
+    } else {
+      throw new NotFoundException('Cannot find task from the requested id');
     }
   }
 }

@@ -9,21 +9,28 @@ export class CreateTasksService {
     content: InsertTasks['content'],
     userToken: SelectUsers['token'],
   ) {
-    try {
-      const user = await db.query.usersTable.findFirst({
+    const user = await db.query.usersTable
+      .findFirst({
         where: eq(usersTable.token, userToken),
+      })
+      .catch(() => {
+        throw new InternalServerErrorException(
+          'Failed to fetch to the database',
+        );
       });
-      const task = await db
-        .insert(tasksTable)
-        .values({
-          title,
-          content,
-          userId: user.id,
-        })
-        .returning();
-      return task;
-    } catch {
-      throw new InternalServerErrorException('Failed to fetch to the database');
-    }
+    const task = await db
+      .insert(tasksTable)
+      .values({
+        title,
+        content,
+        userId: user.id,
+      })
+      .returning()
+      .catch(() => {
+        throw new InternalServerErrorException(
+          'Failed to fetch to the database',
+        );
+      });
+    return task;
   }
 }
