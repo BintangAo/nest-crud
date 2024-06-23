@@ -34,7 +34,7 @@ export class UpdateTaskService {
       });
     if (
       user.tasks.some(({ id }) => {
-        id === taskId;
+        return id === taskId;
       })
     ) {
       const task = await db
