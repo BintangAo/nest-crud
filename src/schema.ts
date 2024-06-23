@@ -5,7 +5,7 @@ export const tasksTable = pgTable('tasks_table', {
   id: serial('id').primaryKey(),
   title: text('title').notNull(),
   content: text('content').notNull(),
-  userId: integer('user_id'),
+  userId: integer('user_id').notNull(),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at')
     .notNull()
@@ -28,7 +28,7 @@ export const usersRelations = relations(usersTable, ({ many }) => ({
 }));
 export const tasksRelations = relations(tasksTable, ({ one }) => ({
   user: one(usersTable, {
-    fields: [tasksTable.id],
+    fields: [tasksTable.userId],
     references: [usersTable.id],
   }),
 }));
