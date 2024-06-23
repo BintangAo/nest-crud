@@ -15,14 +15,28 @@ export class UsersController {
     console.log(userToken);
   }
   @Post('register')
-  async userRegister(@Body() body: UserBody, @Res() res: Response) {
+  async userRegister(
+    @Body() body: UserBody,
+    @Res() res: Response,
+    @Req() req: Request,
+  ) {
+    if (req.signedCookies['user-token']) {
+      return res.redirect('/');
+    }
     const user = await this.register.registerUser(body);
     res.cookie('user-token', user.token, { signed: true }).json({
       message: 'Success on registering user',
     });
   }
   @Get('login')
-  async userLogin(@Body() body: UserBody, @Res() res: Response) {
+  async userLogin(
+    @Body() body: UserBody,
+    @Res() res: Response,
+    @Req() req: Request,
+  ) {
+    if (req.signedCookies['user-token']) {
+      return res.redirect('/');
+    }
     const user = await this.login.userLogin(body);
     res.cookie('user-token', user.token, { signed: true }).json({
       message: 'Success on login',
