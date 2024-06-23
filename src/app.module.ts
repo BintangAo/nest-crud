@@ -7,9 +7,17 @@ import { CreateTasksService } from './tasks/create-tasks.service';
 import { UsersController } from './users/users.controller';
 import { RegisterService } from './users/register/register.service';
 import { LoginService } from './users/login/login.service';
+import { DeleteTaskService } from './tasks/delete-task.service';
 
 @Module({
   controllers: [AppController, TasksController, UsersController],
-  providers: [AppService, SelectTaskService, CreateTasksService, RegisterService, LoginService],
+  providers: [
+    AppService,
+    SelectTaskService,
+    CreateTasksService,
+    RegisterService,
+    LoginService,
+    DeleteTaskService,
+  ],
 })
 export class AppModule {}

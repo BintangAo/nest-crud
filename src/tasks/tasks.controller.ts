@@ -15,12 +15,14 @@ import { SelectTaskService } from './select-tasks.service';
 import { InsertTasks, SelectTasks } from 'src/schema';
 import { Request, Response } from 'express';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { DeleteTaskService } from './delete-task.service';
 @Controller('tasks')
 @UseGuards(new AuthGuard())
 export class TasksController {
   constructor(
     private readonly createTask: CreateTasksService,
     private readonly selectTask: SelectTaskService,
+    private readonly deleteTask: DeleteTaskService,
   ) {}
 
   @Get(':id')
@@ -57,5 +59,14 @@ export class TasksController {
     );
     return res.json(task);
   }
-  
+  @Delete()
+  async delete(
+    @Param() params: { id: SelectTasks['id'] },
+    @Res() res: Response,
+    @Req() req: Request,
+  ) {
+    const userToken = req.signedCookies['user-token'] as string;
+    const task = this.deleteTask.deleteOneTask(params.id, userToken);
+    return res.json(task);
+  }
 }
