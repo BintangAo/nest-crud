@@ -62,7 +62,7 @@ export class TasksController {
     );
     return res.json(task);
   }
-  @Delete()
+  @Delete(':id')
   async delete(
     @Param() params: { id: SelectTasks['id'] },
     @Res() res: Response,
@@ -72,7 +72,7 @@ export class TasksController {
     const task = this.deleteTask.deleteOneTask(params.id, userToken);
     return res.json(task);
   }
-  @Patch()
+  @Patch(':id')
   async update(
     @Param() params: { id: SelectTasks['id'] },
     @Res() res: Response,
